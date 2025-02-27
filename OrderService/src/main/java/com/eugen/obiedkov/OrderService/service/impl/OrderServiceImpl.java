@@ -57,8 +57,7 @@ public class OrderServiceImpl implements OrderService {
         String orderStatus = null;
 
         try {
-            ResponseEntity<Long> longResponseEntity = paymentService.doPayment(paymentRequest);
-            System.out.println("________________" + longResponseEntity.getBody());
+            paymentService.doPayment(paymentRequest);
             log.info("Payment done Successfully. Changing the Order status to PLACED");
             orderStatus = "PLACED";
         } catch (Exception e) {

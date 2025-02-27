@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/placeOrder")
+    @PreAuthorize("hasAuthority('Customer')")
     public ResponseEntity<Long> placeOrder(@RequestBody OrderRequest orderRequest) {
         long orderId = orderService.placeOrder(orderRequest);
         log.info("Order Id: {}", orderId);
@@ -25,6 +27,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority('Customer')")
     public ResponseEntity<OrderResponse> getOrderDetails(@PathVariable Long orderId) {
         OrderResponse orderResponse = orderService.getOrderDetails(orderId);
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
